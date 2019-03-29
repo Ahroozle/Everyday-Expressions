@@ -246,4 +246,4 @@ These new **Manual Captures** denoted by the `(?$)` groups don't capture anythin
 - - -
 
 I am not a career mathematician by any means. If any are inclined to think on what I've constructed, by all means feel free to. I'm genuinely curious what it is I've actually made; I doubt I can even call it a DFA or anything like one by this point.
-<!-- Project started March 2nd, 2019. Initial commit made on March ###, 2019 -->
+<!-- Project started March 2nd, 2019. Initial commit made on March 29th, 2019 -->
