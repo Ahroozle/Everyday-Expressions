@@ -26,6 +26,8 @@ namespace Evex
 			bool IterateReverse = false)
 		{
 			OutMatchEnd = Input;
+			
+			std::unordered_map<RegexLoopNode<T>*, int> StoredTimes;
 
 			std::vector<RegexNode<T>*> CurrentNexts;
 
@@ -42,6 +44,13 @@ namespace Evex
 				bool NewNodeFound = false;
 				for (RegexNode<T>* currNext : CurrentNexts)
 				{
+					RegexLoopNode<T>* AsLoop = dynamic_cast<RegexLoopNode<T>*>(currNext);
+					if (AsLoop && AsLoop->BoundTicker && StoredTimes.find(AsLoop) == StoredTimes.end())
+					{
+						StoredTimes[AsLoop] = AsLoop->BoundTicker->CurrTimes;
+						AsLoop->BoundTicker->Reset();
+					}
+
 					if (currNext->CanEnter(OutMatchEnd, Outers))
 					{
 						CurrNode = currNext;
@@ -77,6 +86,9 @@ namespace Evex
 				++OutMatchEnd;
 			else
 				--OutMatchEnd;
+
+			for (auto& currPair : StoredTimes)
+				currPair.first->BoundTicker->CurrTimes = currPair.second;
 
 			if (CurrNode)
 			{

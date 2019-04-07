@@ -785,13 +785,15 @@ namespace Evex
 			return Concat(Sides[0], Sides[1]);
 		}
 
+	public:
+
 		// Retrieves a numbered capture. NOTE: Indices offset by 1! i.e. "\\1" or "\\k<1>" -> Captures[0]
 		inline bool GetCapture(int Index, std::basic_string<T>& OutCapture, bool& OutCaptureSuccess)
 		{
-			if (Index < 0 || Index >= Captures.size())
+			if (Index < 1 || Index > (int)Captures.size())
 				return false;
 	
-			RegexCapture<T>* Retrieved = dynamic_cast<RegexCapture<T>*>(Captures[Index]);
+			RegexCapture<T>* Retrieved = dynamic_cast<RegexCapture<T>*>(Captures[Index - 1]);
 	
 			if (Retrieved)
 			{
@@ -806,10 +808,10 @@ namespace Evex
 		// Retrieves a numbered capture collection. NOTE: Indices offset by 1! i.e. "\\1" or "\\k<1> -> Captures[0]
 		inline bool GetCaptureCollection(int Index, std::vector<std::basic_string<T>>& OutCaptures, bool& OutCaptureSuccess)
 		{
-			if (Index < 0 || Index >= Captures.size())
+			if (Index < 1 || Index > Captures.size())
 				return false;
 	
-			RegexCaptureCollection<T>* Retrieved = dynamic_cast<RegexCaptureCollection<T>*>(Captures[Index]);
+			RegexCaptureCollection<T>* Retrieved = dynamic_cast<RegexCaptureCollection<T>*>(Captures[Index - 1]);
 	
 			if (Retrieved)
 			{
@@ -905,6 +907,7 @@ namespace Evex
 			}
 		}
 	
+	private:
 	
 		// Gets the chunk within which a node resides
 		RegexChunk<T>* GetChunkOfNode(const RegexNodeBase<T>* Node)

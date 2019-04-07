@@ -785,7 +785,23 @@ namespace Evex
 			{
 				int KeptDepth = CurrDepth++;
 				if (KeptDepth < MaxDepth)
-					return BoundCapture->LastCapture->CanEnter(Input, Outers);
+				{
+					IterType Copy;
+
+					std::vector<RegexNode<T>*> AppendOuters;
+					if (nullptr != Outers)
+						AppendOuters = *Outers;
+					AppendOuters.push_back(this);
+
+					RegexGroupNode<T>* AsGroup = dynamic_cast<RegexGroupNode<T>*>(BoundCapture->LastCapture);
+
+					if (RegexChunk<T>::Match(Input, AsGroup->Ins, AsGroup->Outs, AsGroup->LazyGroup, Copy, &AppendOuters))
+					{
+						Input = Copy;
+						KeptDepth = 0;
+						return true;
+					}
+				}
 				else
 					throw RegexRuntimeException("Maximum recursion depth exceeded during match!");
 	
